@@ -2,6 +2,10 @@
 
 #include "common.h"
 
+#if defined(__APPLE__)
+#include "TargetConditionals.h"
+#endif
+
 class ZUtil
 {
 public:
@@ -12,7 +16,9 @@ public:
 	static string 		FormatSize(int64_t size, int64_t base = 1024);
 	static time_t		GetUnixStamp();
 	static uint64_t 	GetMicroSecond();
+#if !TARGET_OS_IOS
 	static bool			SystemExecV(const char* szCmd, ...);
+#endif
 	static uint32_t		ByteAlign(uint32_t uValue, uint32_t uAlign);
 	static const char*	GetBaseName(const char* path);
 	static int			builtin_clzll(uint64_t x);

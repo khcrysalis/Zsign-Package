@@ -5,6 +5,10 @@
 #include "timer.h"
 #include "archive.h"
 
+#if defined(__APPLE__)
+#include "TargetConditionals.h"
+#endif
+
 #ifdef _WIN32
 #include "common_win32.h"
 #endif
@@ -289,8 +293,11 @@ int main(int argc, char* argv[])
 	}
 
 	//install
+	
 	if (bRet && bInstall) {
+#if !TARGET_OS_IOS
 		bRet = ZUtil::SystemExecV("ideviceinstaller -i  \"%s\"", strOutputFile.c_str());
+#endif
 	}
 
 	//clean

@@ -1,4 +1,7 @@
 #include "util.h"
+#if defined(__APPLE__)
+#include "TargetConditionals.h"
+#endif
 
 #ifdef _WIN32
 #define PRId64						"lld"
@@ -51,6 +54,7 @@ uint64_t ZUtil::GetMicroSecond()
 #endif
 }
 
+#if !TARGET_OS_IOS
 bool  ZUtil::SystemExecV(const char* szCmd, ...)
 {
 	FORMAT_V(szCmd, szRealCmd);
@@ -66,6 +70,7 @@ bool  ZUtil::SystemExecV(const char* szCmd, ...)
 	}
 	return true;
 }
+#endif
 
 uint16_t ZUtil::Swap(uint16_t value)
 {
