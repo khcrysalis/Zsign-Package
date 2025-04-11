@@ -19,7 +19,9 @@ public:
 				string strInfoSHA256, 
 				const string& strCodeResourcesData);
 	bool InjectDylib(bool bWeakInject, const char* szDylibFile);
-
+	bool ChangeDylibPath(const char *oldPath, const char *newPath);
+	std::vector<std::string> ListDylibs();
+	bool RemoveDylib(const std::set<std::string> &dylibNames);
 private:
 	bool OpenFile(const char* szPath);
 	bool CloseFile();

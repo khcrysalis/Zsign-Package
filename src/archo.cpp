@@ -729,3 +729,68 @@ void ZArchO::RemoveDylibs(set<string> setDylibs)
 	memcpy(pLoadCommand, new_load_command_data, new_load_command_size);
 	free(new_load_command_data);
 }
+
+std::vector<std::string> ZArchO::ListDylibs() {
+	std::vector<std::string> dylibList;
+	uint8_t *pLoadCommand = m_pBase + m_uHeaderSize;
+	
+	for (uint32_t i = 0; i < BO(m_pHeader->ncmds); i++) {
+		load_command *plc = (load_command *)pLoadCommand;
+		if (LC_LOAD_DYLIB == BO(plc->cmd) || LC_LOAD_WEAK_DYLIB == BO(plc->cmd)) {
+			dylib_command *dlc = (dylib_command *)pLoadCommand;
+			const char *szDyLib = (const char *)(pLoadCommand + BO(dlc->dylib.name.offset));
+			dylibList.push_back(std::string(szDyLib));
+		}
+		pLoadCommand += BO(plc->cmdsize);
+	}
+	
+	return dylibList;
+}
+
+bool ZArchO::ChangeDylibPath(const char *oldPath, const char *newPath) {
+	if (NULL == m_pHeader) {
+		return false;
+	}
+	
+	uint8_t *pLoadCommand = m_pBase + m_uHeaderSize;
+	bool pathChanged = false;
+	uint32_t oldPathLength = (uint32_t)strlen(oldPath);
+	uint32_t newPathLength = (uint32_t)strlen(newPath);
+	uint32_t oldPathPadding = (8 - oldPathLength % 8) % 8;
+	uint32_t newPathPadding = (8 - newPathLength % 8) % 8;
+	uint32_t newLoadCommandSize = 0;
+	
+	for (uint32_t i = 0; i < BO(m_pHeader->ncmds); i++) {
+		load_command *plc = (load_command *)pLoadCommand;
+		uint32_t uLoadType = BO(plc->cmd);
+		
+		if (LC_LOAD_DYLIB == uLoadType || LC_LOAD_WEAK_DYLIB == uLoadType) {
+			dylib_command *dlc = (dylib_command *)pLoadCommand;
+			const char *szDyLib = (const char *)(pLoadCommand + BO(dlc->dylib.name.offset));
+			
+			if (strcmp(szDyLib, oldPath) == 0) {
+				uint32_t dylibPathOffset = sizeof(dylib_command);
+				uint32_t dylibPathSize = newPathLength + newPathPadding;
+				if (dylibPathOffset + dylibPathSize > BO(plc->cmdsize)) {
+					ZLog::Error(">>> Insufficient space to update dylib path!\n");
+					return false;
+				}
+				
+				memcpy(pLoadCommand + dylibPathOffset, newPath, newPathLength);
+				memset(pLoadCommand + dylibPathOffset + newPathLength, 0, newPathPadding);
+				
+				ZLog::PrintV(">>> Dylib Path Changed: %s -> %s\n", oldPath, newPath);
+				
+				pathChanged = true;
+			}
+		}
+		
+		pLoadCommand += BO(plc->cmdsize);
+	}
+	
+	if (!pathChanged) {
+		ZLog::PrintV(">>> Old Dylib Path Not Found: %s\n", oldPath);
+	}
+	
+	return pathChanged;
+}

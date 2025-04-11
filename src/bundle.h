@@ -18,11 +18,12 @@ public:
 					const vector<string>& arrDylibFiles,
 					bool bForce,
 					bool bWeakInject,
-					bool bEnableCache);
+					bool bEnableCache,
+					bool excludeProvisioning);
 
 private:
 	bool SignNode(jvalue& jvNode);
-	void GetNodeChangedFiles(jvalue& jvNode);
+	void GetNodeChangedFiles(jvalue& jvNode, bool dontGenerateEmbeddedMobileProvision);
 	void GetChangedFiles(jvalue& jvNode, vector<string>& arrChangedFiles);
 	bool ModifyPluginsBundleId(const string& strOldBundleId, const string& strNewBundleId);
 	bool ModifyBundleInfo(const string& strBundleId, const string& strBundleVersion, const string& strDisplayName);
