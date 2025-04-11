@@ -29,7 +29,7 @@ let package = Package(
 			],
 			path: "src",
 			exclude: [
-				"archive.cpp",
+				"common/archive.cpp",
 				"zsign.cpp"
 			],
 			sources: [
