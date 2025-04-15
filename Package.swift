@@ -47,7 +47,7 @@ let package = Package(
 				"common/timer.cpp",
 				"common/util.cpp"
 			],
-			publicHeadersPath: ".",
+			publicHeadersPath: "include",
 			cxxSettings: [
 				.headerSearchPath("."),
 				.headerSearchPath("common"),

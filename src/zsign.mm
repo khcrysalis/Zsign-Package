@@ -15,16 +15,18 @@
 
 extern "C" {
 
-bool ListDylibs(NSString *filePath, NSMutableArray *dylibPathsArray) {
+NSArray<NSString *> *ListDylibs(NSString *filePath) {
 	ZTimer gtimer;
 	@autoreleasepool {
+		NSMutableArray<NSString *> *dylibPathsArray = [NSMutableArray array];
+		
 		std::string filePathStr = [filePath UTF8String];
 		
 		ZMachO machO;
 		bool initSuccess = machO.Init(filePathStr.c_str());
 		if (!initSuccess) {
 			gtimer.Print(">>> Failed to initialize ZMachO.");
-			return false;
+			return nil;
 		}
 		
 		std::vector<std::string> dylibPaths = machO.ListDylibs();
@@ -41,7 +43,7 @@ bool ListDylibs(NSString *filePath, NSMutableArray *dylibPathsArray) {
 		
 		machO.Free();
 		
-		return true;
+		return [dylibPathsArray copy];
 	}
 }
 

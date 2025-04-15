@@ -15,7 +15,7 @@
 extern "C" {
 #endif
 
-bool ListDylibs(NSString *filePath, NSMutableArray *dylibPathsArray);
+NSArray<NSString *> *ListDylibs(NSString *filePath);
 
 int zsign(NSString *app,
 		  NSString *prov,
