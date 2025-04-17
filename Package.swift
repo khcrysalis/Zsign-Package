@@ -37,6 +37,7 @@ let package = Package(
 				"bundle.cpp",
 				"macho.cpp",
 				"openssl.cpp",
+				"openssl_tools.mm",
 				"signing.cpp",
 				"zsign.mm",
 				"common/base64.cpp",
