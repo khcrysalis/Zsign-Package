@@ -70,3 +70,22 @@ void password_check_fix_WHAT_THE_FUCK(NSString *path) {
 	OPENSSL_assert((size_t)BIO_write(in, strProvisionData.data(), (int)strProvisionData.size()) == strProvisionData.size());
 	d2i_CMS_bio(in, NULL);
 }
+
+//void password_check_fix_clean(NSString *path) {
+//	string strProvisionFile = [path cStringUsingEncoding:NSUTF8StringEncoding];
+//	string strProvisionData;
+//	ZFile::ReadFile(strProvisionFile.c_str(), strProvisionData);
+//	
+//	BIO *in = BIO_new(BIO_s_mem());
+//	if (!in) return;
+//	
+//	if ((size_t)BIO_write(in, strProvisionData.data(), (int)strProvisionData.size()) != strProvisionData.size()) {
+//		BIO_free(in);
+//		return;
+//	}
+//	
+//	CMS_ContentInfo *cms = d2i_CMS_bio(in, NULL);
+//	if (cms) CMS_ContentInfo_free(cms);
+//	// free my boy
+//	BIO_free(in);
+//}
