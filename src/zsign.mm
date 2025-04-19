@@ -15,6 +15,59 @@
 
 extern "C" {
 
+bool InjectDyLib(NSString *filePath, NSString *dylibPath, bool weakInject, bool bCreate) {
+	ZTimer gtimer;
+	@autoreleasepool {
+		std::string filePathStr = [filePath UTF8String];
+		std::string dylibPathStr = [dylibPath UTF8String];
+		
+		ZMachO machO;
+		bool initSuccess = machO.Init(filePathStr.c_str());
+		if (!initSuccess) {
+			gtimer.Print(">>> Failed to initialize ZMachO.");
+			return false;
+		}
+		
+		bool success = machO.InjectDylib(weakInject, dylibPathStr.c_str());
+		
+		machO.Free();
+		
+		if (success) {
+			gtimer.Print(">>> Dylib injected successfully!");
+			return true;
+		} else {
+			gtimer.Print(">>> Failed to inject dylib.");
+			return false;
+		}
+	}
+}
+
+bool UninstallDylibs(NSString *filePath, NSArray<NSString *> *dylibPathsArray) {
+	ZTimer gtimer;
+	@autoreleasepool {
+		std::string filePathStr = [filePath UTF8String];
+		std::set<std::string> dylibsToRemove;
+		
+		for (NSString *dylibPath in dylibPathsArray) {
+			dylibsToRemove.insert([dylibPath UTF8String]);
+		}
+		
+		ZMachO machO;
+		bool initSuccess = machO.Init(filePathStr.c_str());
+		if (!initSuccess) {
+			gtimer.Print(">>> Failed to initialize ZMachO.");
+			return false;
+		}
+		
+		machO.RemoveDylib(dylibsToRemove);
+		
+		machO.Free();
+		
+		gtimer.Print(">>> Dylibs uninstalled successfully!");
+		return true;
+	}
+}
+
 NSArray<NSString *> *ListDylibs(NSString *filePath) {
 	ZTimer gtimer;
 	@autoreleasepool {
@@ -50,7 +103,6 @@ NSArray<NSString *> *ListDylibs(NSString *filePath) {
 bool ChangeDylibPath(NSString *filePath, NSString *oldPath, NSString *newPath) {
 	ZTimer gtimer;
 	@autoreleasepool {
-		// Convert NSString to std::string
 		std::string filePathStr = [filePath UTF8String];
 		std::string oldPathStr = [oldPath UTF8String];
 		std::string newPathStr = [newPath UTF8String];
