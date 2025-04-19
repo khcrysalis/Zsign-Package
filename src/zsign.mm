@@ -135,15 +135,15 @@ int zsign(NSString *app,
 		  NSString *bundleid,
 		  NSString *displayname,
 		  NSString *bundleversion,
+		  bool adhoc,
 		  bool excludeprovion
 ) {
 	ZTimer atimer;
 	ZTimer gtimer;
 	
 	bool bForce = true;
-	bool bInstall = false;
 	bool bWeakInject = false;
-	bool bAdhoc = false;
+	bool bAdhoc = adhoc;
 	bool bSHA256Only = false;
 	
 	string strCertFile;
@@ -182,6 +182,7 @@ int zsign(NSString *app,
 	atimer.Reset();
 	ZBundle bundle;
 	bool bRet = bundle.SignFolder(&zsa, strFolder, strBundleId, strBundleVersion, strDisplayName, arrDylibFiles, bForce, bWeakInject, bEnableCache, excludeprovion);
+	ZLog::PrintV(">>> Signing:\t%s %s\n", strPath.c_str(), (bAdhoc ? " (Ad-hoc)" : ""));
 	atimer.PrintResult(bRet, ">>> Signed %s!", bRet ? "OK" : "Failed");
 	
 	gtimer.Print(">>> Done.");
