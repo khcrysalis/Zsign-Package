@@ -24,8 +24,6 @@ int zsign(NSString *app,
 		  NSString *bundleid,
 		  NSString *displayname,
 		  NSString *bundleversion,
-		  NSArray<NSString *> *inject,
-		  NSArray<NSString *> *disinject,
 		  bool dontGenerateEmbeddedMobileProvision
 );
 

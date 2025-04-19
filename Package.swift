@@ -19,13 +19,13 @@ let package = Package(
 		),
 	],
 	dependencies: [
-		.package(url: "https://github.com/krzyzanowskim/OpenSSL-Package.git", from: "3.3.1000")
+		.package(url: "https://github.com/krzyzanowskim/OpenSSL", from: "3.3.3001")
 	],
 	targets: [
 		.target(
 			name: "Zsign",
 			dependencies: [
-				.product(name: "OpenSSL", package: "OpenSSL-Package")
+				.product(name: "OpenSSL", package: "OpenSSL")
 			],
 			path: "src",
 			exclude: [
@@ -53,6 +53,9 @@ let package = Package(
 				.headerSearchPath("."),
 				.headerSearchPath("common"),
 				.unsafeFlags(["-std=c++17"])
+			],
+			linkerSettings: [
+				.linkedFramework("OpenSSL"),
 			]
 		)
 	]

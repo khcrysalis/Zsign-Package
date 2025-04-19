@@ -83,8 +83,6 @@ int zsign(NSString *app,
 		  NSString *bundleid,
 		  NSString *displayname,
 		  NSString *bundleversion,
-		  NSArray<NSString *> *inject,
-		  NSArray<NSString *> *disinject,
 		  bool excludeprovion
 ) {
 	ZTimer atimer;
@@ -115,50 +113,10 @@ int zsign(NSString *app,
 	strDisplayName = [displayname cStringUsingEncoding:NSUTF8StringEncoding];
 	strBundleVersion = [bundleversion cStringUsingEncoding:NSUTF8StringEncoding];
 	
-	for (NSString *dylib in inject) {
-		arrDylibFiles.push_back([dylib cStringUsingEncoding:NSUTF8StringEncoding]);
-	}
-	
 	string strPath = [app cStringUsingEncoding:NSUTF8StringEncoding];
 	if (!ZFile::IsFileExists(strPath.c_str())) {
 		ZLog::ErrorV(">>> Invalid path! %s\n", strPath.c_str());
 		return -1;
-	}
-	
-	bool bZipFile = ZFile::IsZipFile(strPath.c_str());
-	if (!bZipFile && !ZFile::IsFolder(strPath.c_str())) { // macho file
-		ZMachO* macho = new ZMachO();
-		if (!macho->Init(strPath.c_str())) {
-			ZLog::ErrorV(">>> Invalid mach-o file! %s\n", strPath.c_str());
-			return -1;
-		}
-		
-		if (!bAdhoc && arrDylibFiles.empty() && (strPKeyFile.empty() || strProvFile.empty())) {
-			macho->PrintInfo();
-			return 0;
-		}
-		
-		ZSignAsset zsa;
-		if (!zsa.Init(strCertFile, strPKeyFile, strProvFile, strEntitleFile, strPassword, bAdhoc, bSHA256Only, true)) {
-			return -1;
-		}
-		
-		if (!arrDylibFiles.empty()) {
-			for (string dyLibFile : arrDylibFiles) {
-				if (!macho->InjectDylib(bWeakInject, dyLibFile.c_str())) {
-					return -1;
-				}
-			}
-		}
-		
-		atimer.Reset();
-		ZLog::PrintV(">>> Signing:\t%s %s\n", strPath.c_str(), (bAdhoc ? " (Ad-hoc)" : ""));
-		string strInfoSHA1;
-		string strInfoSHA256;
-		string strCodeResourcesData;
-		bool bRet = macho->Sign(&zsa, bForce, strBundleId, strInfoSHA1, strInfoSHA256, strCodeResourcesData);
-		atimer.PrintResult(bRet, ">>> Signed %s!", bRet ? "OK" : "Failed");
-		return bRet ? 0 : -1;
 	}
 	
 	ZSignAsset zsa;
