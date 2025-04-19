@@ -15,7 +15,7 @@
 extern "C" {
 #endif
 
-bool InjectDyLib(NSString *filePath, NSString *dylibPath, bool weakInject, bool bCreate);
+bool InjectDyLib(NSString *filePath, NSString *dylibPath, bool weakInject);
 bool UninstallDylibs(NSString *filePath, NSArray<NSString *> *dylibPathsArray);
 NSArray<NSString *> *ListDylibs(NSString *filePath);
 bool ChangeDylibPath(NSString *filePath, NSString *oldPath, NSString *newPath);

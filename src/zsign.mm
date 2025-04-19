@@ -15,7 +15,7 @@
 
 extern "C" {
 
-bool InjectDyLib(NSString *filePath, NSString *dylibPath, bool weakInject, bool bCreate) {
+bool InjectDyLib(NSString *filePath, NSString *dylibPath, bool weakInject) {
 	ZTimer gtimer;
 	@autoreleasepool {
 		std::string filePathStr = [filePath UTF8String];
