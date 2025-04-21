@@ -132,6 +132,7 @@ int zsign(NSString *app,
 		  NSString *prov,
 		  NSString *key,
 		  NSString *pass,
+		  NSString *entitlement,
 		  NSString *bundleid,
 		  NSString *displayname,
 		  NSString *bundleversion,
@@ -160,6 +161,7 @@ int zsign(NSString *app,
 	strPKeyFile = [key cStringUsingEncoding:NSUTF8StringEncoding];
 	strProvFile = [prov cStringUsingEncoding:NSUTF8StringEncoding];
 	strPassword = [pass cStringUsingEncoding:NSUTF8StringEncoding];
+	strEntitleFile = [entitlement cStringUsingEncoding:NSUTF8StringEncoding];
 	
 	strBundleId = [bundleid cStringUsingEncoding:NSUTF8StringEncoding];
 	strDisplayName = [displayname cStringUsingEncoding:NSUTF8StringEncoding];
