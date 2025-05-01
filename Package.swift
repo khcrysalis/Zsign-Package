@@ -17,6 +17,10 @@ let package = Package(
 			name: "zsign",
 			targets: ["Zsign"]
 		),
+		.library(
+			name: "ZsignSwift",
+			targets: ["ZsignSwift"]
+		),
 	],
 	dependencies: [
 		.package(url: "https://github.com/krzyzanowskim/OpenSSL", from: "3.3.3001")
@@ -56,6 +60,16 @@ let package = Package(
 			],
 			linkerSettings: [
 				.linkedFramework("OpenSSL"),
+			]
+		),
+		.target(
+			name: "ZsignSwift",
+			dependencies: [
+				"Zsign"
+			],
+			path: "Sources",
+			sources: [
+				"zsign.swift"
 			]
 		)
 	]
