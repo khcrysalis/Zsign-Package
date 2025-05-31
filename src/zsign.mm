@@ -15,6 +15,32 @@
 
 extern "C" {
 
+bool CheckIfSigned(NSString *filePath) {
+	ZTimer gtimer;
+	@autoreleasepool {
+		std::string filePathStr = [filePath UTF8String];
+		
+		ZMachO machO;
+		bool initSuccess = machO.Init(filePathStr.c_str());
+		if (!initSuccess) {
+			gtimer.Print(">>> Failed to initialize ZMachO.");
+			return false;
+		}
+		
+		bool success = machO.CheckSignature();
+		
+		machO.Free();
+		
+		if (success) {
+			gtimer.Print(">>> MachO is signed!");
+			return true;
+		} else {
+			gtimer.Print(">>> MachO is not signed.");
+			return false;
+		}
+	}
+}
+
 bool InjectDyLib(NSString *filePath, NSString *dylibPath, bool weakInject) {
 	ZTimer gtimer;
 	@autoreleasepool {

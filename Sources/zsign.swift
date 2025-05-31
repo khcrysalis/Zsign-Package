@@ -8,6 +8,12 @@
 import Zsign
 
 public enum Zsign {
+	/// Checks if the MachO-file is properly signed
+	/// - Parameter appExecutable: Executable
+	/// - Returns: True if its signed
+	static public func checkSigned(appExecutable: String) -> Bool {
+		CheckIfSigned(appExecutable)
+	}
 	/// Injects a load command to an executable
 	/// - Parameters:
 	///   - appExecutable: Executable
