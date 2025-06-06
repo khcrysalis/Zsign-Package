@@ -21,16 +21,24 @@ bool UninstallDylibs(NSString *filePath, NSArray<NSString *> *dylibPathsArray);
 NSArray<NSString *> *ListDylibs(NSString *filePath);
 bool ChangeDylibPath(NSString *filePath, NSString *oldPath, NSString *newPath);
 
-int zsign(NSString *app,
-		  NSString *prov,
-		  NSString *key,
-		  NSString *pass,
-		  NSString *entitlement,
-		  NSString *bundleid,
-		  NSString *displayname,
-		  NSString *bundleversion,
-		  bool adhoc,
-		  bool dontGenerateEmbeddedMobileProvision
+int zsign(
+	NSString *app,
+	NSString *prov,
+	NSString *key,
+	NSString *pass,
+	NSString *entitlement,
+	NSString *bundleid,
+	NSString *displayname,
+	NSString *bundleversion,
+	bool adhoc,
+	bool dontGenerateEmbeddedMobileProvision
+);
+
+int checkCert(
+	NSString *prov,
+	NSString *key,
+	NSString *pass,
+	void(^completionHandler)(int status, NSDate* expirationDate, NSString *error)
 );
 
 #ifdef __cplusplus

@@ -52,11 +52,11 @@ public:
 	string	m_strProvData;
 	string	m_strEntitleData;
 
-private:
+public:
 	void*	m_evpPKey;
 	void*	m_x509Cert;
 
-private:
+public:
 	static const char* s_szAppleDevCACert;
 	static const char* s_szAppleRootCACert;
 	static const char* s_szAppleDevCACertG3;

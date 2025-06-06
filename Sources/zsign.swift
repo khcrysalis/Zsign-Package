@@ -87,4 +87,24 @@ public enum Zsign {
 		}
 		return true
 	}
+	/// Check revokage
+	/// - Parameters:
+	///   - provisionPath: Relative path to a provisioning file (i.e. `samara.mobileprovision`)
+	///   - p12Path: Relative path to a key file (i.e. `samara.p12`)
+	///   - p12Password: Password to the key file
+	///   - completionHandler: Handler
+	static public func checkRevokage(
+		provisionPath: String = "",
+		p12Path: String = "",
+		p12Password: String = "",
+		completionHandler: @escaping (Int32, Date?, String?) -> Void
+	) {
+		checkCert(
+			provisionPath,
+			p12Path,
+			p12Password
+		) { status, expirationDate, error in
+			completionHandler(status, expirationDate, error)
+		}
+	}
 }
