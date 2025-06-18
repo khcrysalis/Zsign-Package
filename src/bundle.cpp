@@ -91,7 +91,7 @@ bool ZBundle::GetObjectsToSign(const string& strFolder, jvalue& jvInfo)
 				}
 			}
 		} else {
-			if (ZFile::IsPathSuffix(strPath, ".dylib")) {
+			if (ZFile::IsPathSuffix(strPath, ".dylib") || is_64bit_macho(strPath.c_str())) {
 				jvInfo["files"].push_back(strPath.substr(m_strAppFolder.size() + 1));
 			}
 		}
@@ -569,4 +569,16 @@ bool ZBundle::SignFolder(ZSignAsset* pSignAsset,
 	}
 
 	return false;
+}
+
+bool ZBundle::is_64bit_macho(const char *filepath) {
+	FILE *file = fopen(filepath, "rb");
+	if (!file) return false;
+	
+	uint32_t magic;
+	fread(&magic, sizeof(uint32_t), 1, file);
+	fclose(file);
+	
+	// check 64-bit Mach-O magic number
+	return magic == MH_MAGIC_64 || magic == FAT_CIGAM;
 }
