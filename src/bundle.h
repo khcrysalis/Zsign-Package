@@ -37,9 +37,6 @@ private:
 	bool GenerateCodeResources(const string& strFolder, jvalue& jvCodeRes);
 
 private:
-	bool is_64bit_macho(const char *filepath);
-
-private:
 	bool			m_bForceSign;
 	bool			m_bWeakInject;
 	ZSignAsset*		m_pSignAsset;
