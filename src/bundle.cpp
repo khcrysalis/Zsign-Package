@@ -261,14 +261,6 @@ void ZBundle::GetNodeChangedFiles(jvalue& jvNode, bool excludeProvisioning)
 
 bool ZBundle::SignNode(jvalue& jvNode)
 {
-	if (jvNode.has("folders")) {
-		for (size_t i = 0; i < jvNode["folders"].size(); i++) {
-			if (!SignNode(jvNode["folders"][i])) {
-				return false;
-			}
-		}
-	}
-
 	if (jvNode.has("files")) {
 		for (size_t i = 0; i < jvNode["files"].size(); i++) {
 			string strFile = jvNode["files"][i];
@@ -279,6 +271,14 @@ bool ZBundle::SignNode(jvalue& jvNode)
 					return false;
 				}
 			} else {
+				return false;
+			}
+		}
+	}
+	
+	if (jvNode.has("folders")) {
+		for (size_t i = 0; i < jvNode["folders"].size(); i++) {
+			if (!SignNode(jvNode["folders"][i])) {
 				return false;
 			}
 		}
