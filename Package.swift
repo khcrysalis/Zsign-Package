@@ -23,7 +23,6 @@ let package = Package(
 		),
 	],
 	dependencies: [
-		.package(url: "https://github.com/krzyzanowskim/OpenSSL", from: "3.3.3001")
 	],
 	targets: [
 		.target(
